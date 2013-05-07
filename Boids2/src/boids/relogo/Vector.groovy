@@ -1,3 +1,5 @@
+package boids.relogo
+
 class Vector {
 	private Number[] values
 	public Number x
@@ -184,32 +186,5 @@ class Vector {
 		for (def i=0; i<v1Val.size(); i++)
 			resultVal.add(v1Val[i] / x)
 		return new Vector(resultVal  as Number [])
-	}
-	
-	
-	public static void main(String[] args){
-		def v1 = new Vector()
-		def v2 = new Vector(3, 2, 1)
-		def v3 = new Vector(v2)
-		println v1
-		println v2
-		println v3
-		println v3 + v2
-		println v3 += 2
-		println v3 - 3
-		println v2 -= 5
-		println v1 / 5
-		println v3 /= 12
-		println v3.x
-		println v3 = v2
-		println v2.x
-		println v3.x
-		println "v3 = $v3"
-		println "length v3 = ${v3.length()}"
-		println normalize(v3)
-		println "length v3 = ${v3.length()}"
-		v3.setX(10)
-		v3.setY(2)
-		println "x = ${v3.x} and y = ${v3.y} in $v3"
 	}
 }
