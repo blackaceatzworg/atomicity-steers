@@ -9,7 +9,7 @@ class Vector {
 	/* CONSTRUCTORS */
 	public Vector(Number[] values) {
 		super();
-		this.values = values;
+		this.values = values.clone()
 		this.setCoordinates()
 	}
 	Vector(Vector source){
@@ -26,7 +26,7 @@ class Vector {
 		return this.values
 	}
 	public setValues(Number[] values){
-		this.values = values
+		this.values = values.clone()
 		this.setCoordinates()
 	}
 	public setX(Number value){

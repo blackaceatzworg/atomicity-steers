@@ -10,6 +10,8 @@ import repast.simphony.relogo.Utility;
 import repast.simphony.relogo.UtilityG;
 
 class UserTurtle extends BaseTurtle{
+	def m_lastCallTime = 0
+	def m_deltaTime = 0
 	def m_position = new Vector(0, 0)
 	def m_direction = new Vector(0, 0)
 	def m_velocity = new Vector(0, 0)
@@ -21,8 +23,8 @@ class UserTurtle extends BaseTurtle{
 	 * @return
 	 */
 	def correctPosition(){
-		def mapXLimit = (int) (worldWidth() / 2)
-		def mapYLimit = (int) (worldHeight() / 2)
+		def mapXLimit = floor(worldWidth() / 2)
+		def mapYLimit = floor(worldHeight() / 2)
 		
 		if (g_bordersMode == "roundThroughBorders"){
 			while (m_position.x > mapXLimit) 
@@ -40,6 +42,7 @@ class UserTurtle extends BaseTurtle{
 			if (abs(m_position.y) > mapYLimit)
 				m_position.y = mapYLimit * ((m_position.y < 0)? -1:1)
 		}
+		
 		setxy(m_position.x as double, m_position.y as double)
 		setM_position(new Vector(xcor, ycor))
 	}
@@ -49,10 +52,13 @@ class UserTurtle extends BaseTurtle{
 	 * @return
 	 */
 	def correctVelocity(){
-		def currentSpeed = m_velocity.length()
-		if (currentSpeed > g_maxSpeed){
-			m_velocity *= g_maxSpeed / currentSpeed
-		}
+		/* Correct magnitude */
+		def speed = m_velocity.length()
+		if (speed > g_maxSpeed) speed = g_maxSpeed
+		
+		/* Correct angle */
+		m_velocity = velocityWithMaxDelta()
+		m_velocity *= speed / m_velocity.length()
 	}
 
 	/**
@@ -80,21 +86,25 @@ class UserTurtle extends BaseTurtle{
 	 * @param currentHeading
 	 * @param targetDirection
 	 * @param maxDeltaHeading
-	 * @return newHeading
+	 * @return newDirection
 	 */
-	def headingWithMaxDelta(currentHeading, targetDirection, maxDeltaHeading){
-		currentHeading = positiveAngle(currentHeading)
-		def targetHeading = positiveAngle(atan(targetDirection.x, targetDirection.y))
+	private def velocityWithMaxDelta(){
+		def maxDeltaHeading = g_rotationRate * m_deltaTime
+		def currentHeading = positiveAngle(heading)
+		def targetHeading = positiveAngle(atan(m_velocity.x, m_velocity.y))
 		def deltaHeading = narrowestDelta(targetHeading - currentHeading)
 
 		if (abs(deltaHeading) > maxDeltaHeading){
 			deltaHeading = maxDeltaHeading * ((deltaHeading <0 )? -1:1)
 		}
 
-		return positiveAngle(currentHeading + deltaHeading)
+		def newHeading = positiveAngle(currentHeading + deltaHeading)
+		Number[] displacement = getDisplacementFromHeadingAndDistance(newHeading, 1.0)
+		def newDirection = new Vector(displacement)
+		return newDirection
 	}
 
-	static def narrowestDelta = {
+	private static def narrowestDelta = {
 		if (it > 180) { it -= 360 }
 		else if (it < -180) { it += 360 }
 		return it

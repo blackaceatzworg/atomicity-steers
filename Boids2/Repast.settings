@@ -7,11 +7,11 @@
     </default>
     <int>3</int>
     <int>3</int>
-    <string>SettingsFileName</string>
-    <string>Repast.settings</string>
-    <string>LastLoadedScenario</string>
-    <string>D:\Users\Noot\Study\G400 3\Adaptive Systems\atomicity-steers\Boids2\Boids2.rs</string>
     <string>SettingsRegistryId</string>
     <string>Repast.registry</string>
+    <string>LastLoadedScenario</string>
+    <string>D:\Users\Noot\Study\G400 3\Adaptive Systems\atomicity-steers\Boids2\Boids2.rs</string>
+    <string>SettingsFileName</string>
+    <string>Repast.settings</string>
   </hashtable>
 </simphony.settings.SettingsRegistry>

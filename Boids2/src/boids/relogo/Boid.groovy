@@ -8,8 +8,6 @@ import repast.simphony.relogo.Plural;
 import repast.simphony.relogo.Stop;
 
 class Boid extends UserTurtle {
-	def m_lastCallTime = 0
-	def m_deltaTime = 0
 
 	/**
 	 * Initialise attributes
@@ -21,7 +19,6 @@ class Boid extends UserTurtle {
 		setHeading(random(360.0))
 		updateM_direction()
 		updateM_position()
-		"$this created at $m_position"
 		m_velocity = new Vector(
 				getDisplacementFromHeadingAndDistance(heading, 1d) as Number[])
 	}
@@ -32,47 +29,44 @@ class Boid extends UserTurtle {
 	 */
 	def step(){
 		println "\n--${this}-------------------------------------------------"
-		println "$this initial position = $m_position"
-		/* Reinitialise links */
-		SameFlock.removeSameFlockLinks(this)
-
-		/* Compute modifications to trajectory from flocking rules */
-		def v1 = rule1(), v2 = rule2(), v3 = rule3()
-		def v4 = rule4(), v5 = rule5(), v6 = rule6()
-		println "v1 = $v1"
-		println "v2 = $v2"
-		println "v3 = $v3"
-		println "v4 = $v4"
-		println "v5 = $v5"
-		println "v6 = $v6"
-		def velocityModifier = v1 + v2 + v3 + v4 +v5 + v6
-
-		/* Move */
-		updateVelocity(velocityModifier)
-		println " * velocity  = $m_velocity"
-		correctVelocity()
-		println " * corrected velocity  = $m_velocity"
-		updatePositionAndDirection()
-		println " * new position  = $m_position"
-		correctPosition()
-		println " * corrected new position  = $m_position"
-
-	}
-
-	/**
-	 * 
-	 * @param velocityModifier
-	 * @return
-	 */
-	def updateVelocity(velocityModifier){
-
+		println "Initial position = $m_position"
+		println "Initial velocity = $m_velocity"
+		
 		/* Update timer */
 		def timerVal = timer()
 		if (! m_lastCallTime) m_lastCallTime = timerVal // 1st update
 		m_deltaTime = timerVal - m_lastCallTime
 		m_lastCallTime = timerVal
+		
+		/* Reinitialise links */
+		SameFlock.removeSameFlockLinks(this)
 
-		/* Determine velocity */
+		/* Move */
+		updateVelocity()
+		correctVelocity()
+		updatePositionAndDirection()
+		correctPosition()
+
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	def updateVelocity(){
+
+		/* Compute modifications to trajectory from flocking rules */
+		def v1 = rule1(), v2 = rule2(), v3 = rule3()
+		def v4 = rule4(), v5 = rule5(), v6 = rule6()
+//		println "v1 = $v1"
+//		println "v2 = $v2"
+//		println "v3 = $v3"
+//		println "v4 = $v4"
+//		println "v5 = $v5"
+//		println "v6 = $v6"
+		def velocityModifier = v1 + v2 + v3 + v4 +v5 + v6
+		
+		/* Determine target velocity */
 		m_velocity += velocityModifier * m_deltaTime
 	}
 
