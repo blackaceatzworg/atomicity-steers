@@ -1,0 +1,68 @@
+<repast.simphony.data2.engine.DataSetDescriptor>
+  <name>FlocksAndCollisions</name>
+  <type>NON_AGGREGATE</type>
+  <sourceType>boids.relogo.UserObserver</sourceType>
+  <inclTick>false</inclTick>
+  <inclBatchRun>false</inclBatchRun>
+  <inclRandomSeed>false</inclRandomSeed>
+  <scheduleParams>
+    <start>1.0</start>
+    <interval>1.0</interval>
+    <priority>-Infinity</priority>
+    <duration>-1.0</duration>
+    <frequency>REPEAT</frequency>
+  </scheduleParams>
+  <methodDataSources class="linked-hash-map">
+    <entry>
+      <string>timestamp</string>
+      <repast.simphony.data2.engine.MethodDataSourceDefinition>
+        <id>timestamp</id>
+        <className>boids.relogo.UserObserver</className>
+        <methodName>timestamp</methodName>
+      </repast.simphony.data2.engine.MethodDataSourceDefinition>
+    </entry>
+    <entry>
+      <string>relogoRun</string>
+      <repast.simphony.data2.engine.MethodDataSourceDefinition>
+        <id>relogoRun</id>
+        <className>boids.relogo.UserObserver</className>
+        <methodName>relogoRun</methodName>
+      </repast.simphony.data2.engine.MethodDataSourceDefinition>
+    </entry>
+    <entry>
+      <string>boidBoidCollisions</string>
+      <repast.simphony.data2.engine.MethodDataSourceDefinition>
+        <id>boidBoidCollisions</id>
+        <className>boids.relogo.UserObserver</className>
+        <methodName>boidBoidCollisions</methodName>
+      </repast.simphony.data2.engine.MethodDataSourceDefinition>
+    </entry>
+    <entry>
+      <string>boidObstacleCollisions</string>
+      <repast.simphony.data2.engine.MethodDataSourceDefinition>
+        <id>boidObstacleCollisions</id>
+        <className>boids.relogo.UserObserver</className>
+        <methodName>boidObstacleCollisions</methodName>
+      </repast.simphony.data2.engine.MethodDataSourceDefinition>
+    </entry>
+    <entry>
+      <string>flocksMaxSize</string>
+      <repast.simphony.data2.engine.MethodDataSourceDefinition>
+        <id>flocksMaxSize</id>
+        <className>boids.relogo.UserObserver</className>
+        <methodName>flocksMaxSize</methodName>
+      </repast.simphony.data2.engine.MethodDataSourceDefinition>
+    </entry>
+    <entry>
+      <string>flocksNumber</string>
+      <repast.simphony.data2.engine.MethodDataSourceDefinition>
+        <id>flocksNumber</id>
+        <className>boids.relogo.UserObserver</className>
+        <methodName>flocksNumber</methodName>
+      </repast.simphony.data2.engine.MethodDataSourceDefinition>
+    </entry>
+  </methodDataSources>
+  <countSources class="linked-hash-map"/>
+  <customNADataSources class="linked-hash-map"/>
+  <customAggDataSources class="linked-hash-map"/>
+</repast.simphony.data2.engine.DataSetDescriptor>

@@ -8,6 +8,8 @@ import repast.simphony.relogo.Plural;
 import repast.simphony.relogo.Stop;
 
 class Boid extends UserTurtle {
+	def m_collisionsWithBoid = 0
+	def m_collisionsWithObstacle = 0
 
 	/**
 	 * Initialise attributes
@@ -28,9 +30,6 @@ class Boid extends UserTurtle {
 	 * @return
 	 */
 	def step(){
-		println "\n--${this}-------------------------------------------------"
-		println "Initial position = $m_position"
-		println "Initial velocity = $m_velocity"
 		
 		/* Update timer */
 		def timerVal = timer()
@@ -38,8 +37,10 @@ class Boid extends UserTurtle {
 		m_deltaTime = timerVal - m_lastCallTime
 		m_lastCallTime = timerVal
 		
-		/* Reinitialise links */
+		/* Reinitialise links and collisions */
 		SameFlock.removeSameFlockLinks(this)
+		m_collisionsWithBoid = 0
+		m_collisionsWithObstacle = 0
 
 		/* Move */
 		updateVelocity()
@@ -50,7 +51,7 @@ class Boid extends UserTurtle {
 	}
 
 	/**
-	 * 
+	 * Compute the new velocity of the vector from its behavioural rules
 	 * @return
 	 */
 	def updateVelocity(){
@@ -58,13 +59,7 @@ class Boid extends UserTurtle {
 		/* Compute modifications to trajectory from flocking rules */
 		def v1 = rule1(), v2 = rule2(), v3 = rule3()
 		def v4 = rule4(), v5 = rule5(), v6 = rule6()
-//		println "v1 = $v1"
-//		println "v2 = $v2"
-//		println "v3 = $v3"
-//		println "v4 = $v4"
-//		println "v5 = $v5"
-//		println "v6 = $v6"
-		def velocityModifier = v1 + v2 + v3 + v4 +v5 + v6
+		def velocityModifier = v1 + v2 + v3 + v4 + v5 + v6
 		
 		/* Determine target velocity */
 		m_velocity += velocityModifier * m_deltaTime
@@ -114,9 +109,13 @@ class Boid extends UserTurtle {
 	 */
 	def rule2(){
 		Vector awayFromCloseBoids = new Vector(0, 0)
-		for (nearBoid in inRadius(boids(), g_sensingRadius/2d)){
+		for (nearBoid in inRadius(boids(), g_sensingRadius * g_avoidBySensing)){
 			if (nearBoid != this){
-				def awayFromNearBoid = moveAwayFrom(nearBoid.m_position, g_sensingRadius/2d)
+				/* Collision? */
+				def distance = (m_position - nearBoid.m_position).length()
+				if (distance < getSize()) m_collisionsWithBoid++ 
+				
+				def awayFromNearBoid = moveAwayFrom(nearBoid.m_position, g_sensingRadius * g_avoidBySensing)
 				awayFromCloseBoids += awayFromNearBoid
 			}
 		}
@@ -170,9 +169,9 @@ class Boid extends UserTurtle {
 		def mapYLimit = floor(worldHeight() / 2)
 		def origin = new Vector(0, 0)
 		def locationOnBorder = new Vector(m_position)
-		if (mapXLimit - abs(m_position.x) < g_sensingRadius)
+		if (mapXLimit - abs(m_position.x) < g_sensingRadius * g_avoidBySensing)
 			locationOnBorder.x = mapXLimit * ((locationOnBorder.x < 0)? -1:1)
-		if (mapYLimit - abs(m_position.y) < g_sensingRadius)
+		if (mapYLimit - abs(m_position.y) < g_sensingRadius * g_avoidBySensing)
 			locationOnBorder.y = mapYLimit * ((locationOnBorder.y < 0)? -1:1)
 		
 		/* Nothing to do if the borders are far enough */
@@ -190,9 +189,12 @@ class Boid extends UserTurtle {
 	 */
 	def rule6(){
 		Vector awayFromObstacles = new Vector(0, 0)
-		for (nearObstacle in inRadius(obstacles(), g_sensingRadius/2d)){
+		for (nearObstacle in inRadius(obstacles(), g_sensingRadius * g_avoidBySensing)){
+			/* Collision? */
+			def distance = (m_position - nearObstacle.m_position).length()
+			if (distance < (getSize() + nearObstacle.getSize()) / 2d) m_collisionsWithObstacle++ 
 			
-			def awayFromNearObstacle = moveAwayFrom(nearObstacle.m_position, g_sensingRadius/2d)
+			def awayFromNearObstacle = moveAwayFrom(nearObstacle.m_position, g_sensingRadius * g_avoidBySensing)
 			awayFromObstacles += awayFromNearObstacle
 		}
 

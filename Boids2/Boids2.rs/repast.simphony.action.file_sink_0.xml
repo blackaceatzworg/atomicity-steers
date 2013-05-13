@@ -1,0 +1,16 @@
+<repast.simphony.data2.engine.FileSinkDescriptor>
+  <name>FlocksAndCollisions</name>
+  <dataSet>FlocksAndCollisions</dataSet>
+  <delimiter>,</delimiter>
+  <format>TABULAR</format>
+  <sourceIds class="linked-hash-set">
+    <string>timestamp</string>
+    <string>relogoRun</string>
+    <string>boidBoidCollisions</string>
+    <string>boidObstacleCollisions</string>
+    <string>flocksMaxSize</string>
+    <string>flocksNumber</string>
+  </sourceIds>
+  <fileName>ModelOutput.txt</fileName>
+  <addTimeStamp>true</addTimeStamp>
+</repast.simphony.data2.engine.FileSinkDescriptor>

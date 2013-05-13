@@ -4,12 +4,11 @@ import static repast.simphony.relogo.Utility.*;
 import static repast.simphony.relogo.UtilityG.*;
 import repast.simphony.relogo.BaseObserver;
 import repast.simphony.relogo.Stop;
-import repast.simphony.relogo.Utility;
-import repast.simphony.relogo.UtilityG;
 
 class UserObserver extends BaseObserver{
-	def m_drawingForBoids = false
-
+	def m_drawing = false
+	def m_flocksNumber = 0
+	def m_flocksMaxSize = 0
 	def m_relogoRun = 0
 	
 	
@@ -39,41 +38,78 @@ class UserObserver extends BaseObserver{
 	}
 	
 	def go(){
-		updateBoidPenMode()
+		/* Boids */
 		ask(boids()){
 			step()
-			
-//			/* Flock information */
-//			def flockSize = SameFlock.computeFlockSize(it)
-//			if (flockSize > 1){
-//				println "${it} in flock of size $flockSize"
-//				def flock = SameFlock.findBoidsInFlock(this)
-//				println "${it} in flock $flock"
-//			}
 		}
+		updatePenMode()
+		updateFlockSizeAndNumber()
+		
+		/* Obstacles */
 		ask(obstacles()){
 			step()
 		}
 		tick()
 	}
 	
-	private def updateBoidPenMode(){
+	private def updatePenMode(){
 		/* Start drawing */
-		if (g_drawBoidTrails && !m_drawingForBoids){
-			for (boid in boids()){
-//				boid.setPenMode(PEN_DOWN)
-				boid.penDown()
-			}
-			m_drawingForBoids = true
+		if (g_drawTrails && !m_drawing){
+			for (boid in boids()) boid.penDown()
+			for (obstacle in obstacles()) obstacle.penDown()
+			m_drawing = true
 		}
 		/* Stop drawing */
-		else if (!g_drawBoidTrails && m_drawingForBoids){
-			for (boid in boids()){
-//				boid.setPenMode(PEN_UP)
-				boid.penUp()
-			}
-			m_drawingForBoids = false
+		else if (!g_drawTrails && m_drawing){
+			for (boid in boids()) boid.penUp()
+			for (obstacle in obstacles()) obstacle.penUp()
+			m_drawing = false
 		}
+	}
+	
+	/* STATISTICS */
+	def relogoRun(){
+		return m_relogoRun
+	}
+	/**
+	 * Compute the size of the current largest flock and the total number of distinct flocks
+	 * in the simulation
+	 * @param boidsList
+	 * @return
+	 */
+	def updateFlockSizeAndNumber(){
+		def boidsList = boids().clone()
+		def maxSize = 0
+		def numberOfFlocks = 0
+		while (boidsList){
+			def flock = SameFlock.findBoidsInFlock(boidsList[0])
+			def s = flock.size()
+			if (s > maxSize) maxSize = s // update maximum flock size
+			numberOfFlocks++ // update number of flocks
+			boidsList -= flock // remove boids of this flock from the list of boids to process
+		}
+		m_flocksNumber = numberOfFlocks
+		m_flocksMaxSize = maxSize
+	}
+	def flocksMaxSize(){
+		return m_flocksMaxSize
+	}
+	def flocksNumber(){
+		return m_flocksNumber
+	}
+	def boidBoidCollisions(){
+		if (!boids()) return 0
+		def numberOfCollisions = boids().sum{ it.m_collisionsWithBoid }
+		numberOfCollisions = ceiling(numberOfCollisions / 2d)
+		return numberOfCollisions
+	}
+	def boidObstacleCollisions(){
+		if (!boids()) return 0
+		def numberOfCollisions = boids().sum{ it.m_collisionsWithObstacle }
+		return numberOfCollisions
+	}
+	def timestamp(){
+		ticks()
 	}
 
 }

@@ -20,7 +20,7 @@
 									<delegate id="delegate_SplitDockStationFactory">
 										<node nodeId="1283530786649" orientation="HORIZONTAL" divider="0.18556701030927836">
 											<leaf id="0" nodeId="1283530797383"/>
-											<node nodeId="1367785967673" orientation="HORIZONTAL" divider="0.7590870667793745">
+											<node nodeId="1367785967673" orientation="HORIZONTAL" divider="0.7395421141888072">
 												<leaf id="1" nodeId="1283530786627"/>
 												<node nodeId="1367785971727" orientation="VERTICAL" divider="0.26170212765957446">
 													<leaf id="2" nodeId="1367785971721"/>
@@ -58,7 +58,7 @@
 									</child>
 									<child>
 										<layout factory="delegate_StackDockStationFactory">
-											<selected>1</selected>
+											<selected>0</selected>
 											<children>
 												<child id="0"/>
 												<child id="1"/>
@@ -252,7 +252,7 @@
 								<delegate id="delegate_SplitDockStationFactory">
 									<node nodeId="1283530786649" orientation="HORIZONTAL" divider="0.18556701030927836">
 										<leaf id="0" nodeId="1283530797383"/>
-										<node nodeId="1367785967673" orientation="HORIZONTAL" divider="0.7590870667793745">
+										<node nodeId="1367785967673" orientation="HORIZONTAL" divider="0.7395421141888072">
 											<leaf id="1" nodeId="1283530786627"/>
 											<node nodeId="1367785971727" orientation="VERTICAL" divider="0.26170212765957446">
 												<leaf id="2" nodeId="1367785971721"/>
@@ -290,7 +290,7 @@
 								</child>
 								<child>
 									<layout factory="delegate_StackDockStationFactory">
-										<selected>1</selected>
+										<selected>0</selected>
 										<children>
 											<child id="0"/>
 											<child id="1"/>

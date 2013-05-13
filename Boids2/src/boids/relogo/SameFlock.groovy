@@ -23,9 +23,9 @@ class SameFlock extends BaseLink {
 	}
 	
 	/**
-	 * 
+	 * Compute the size of the flock boid b is in
 	 * @param b
-	 * @return
+	 * @return flockSize
 	 */
 	static def computeFlockSize(Boid b){
 		def flock = findBoidsInFlock(b)
@@ -33,14 +33,14 @@ class SameFlock extends BaseLink {
 	}
 	
 	/**
-	 * 
+	 * Recursively find all boids in a flock
 	 * @param b
 	 * @param alreadyInFlock
 	 * @return alreadyInFlock
 	 */
 	static def findBoidsInFlock(Boid b, alreadyInFlock=[]){
 		alreadyInFlock.add(b)
-		for (neighbor in b.sameFlockNeighbors()) // undiscovered neighbors
+		for (neighbor in b.sameFlockNeighbors()) // undiscovered neighbours
 			if (! alreadyInFlock.contains(neighbor))
 				alreadyInFlock = findBoidsInFlock(neighbor, alreadyInFlock)
 		return alreadyInFlock

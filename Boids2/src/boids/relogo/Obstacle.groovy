@@ -31,16 +31,11 @@ class Obstacle extends UserTurtle {
 	 * @return
 	 */
 	def step(){
-		println "\n++${this}+++++++++++++++++++++++++++++++++++++++++++++++++"
-
 		/* Update timer */
 		def timerVal = timer()
 		if (! m_lastCallTime) m_lastCallTime = timerVal // 1st update
 		m_deltaTime = timerVal - m_lastCallTime
 		m_lastCallTime = timerVal
-
-		/* Reinitialise links */
-
 
 		/* Move */
 		updateVelocity()
@@ -71,7 +66,7 @@ class Obstacle extends UserTurtle {
 	 */
 	def updatePositionAndDirection(){
 
-		def newPosition = m_position + (m_velocity*5d) * m_deltaTime // 5 times faster than boids at most
+		def newPosition = m_position + (m_velocity*g_maxSpeed/1.5) * m_deltaTime // 1.5 times faster than boids at most
 		def newHeading = positiveAngle(atan(m_velocity.x, m_velocity.y))
 
 		/* Update direction and position */
